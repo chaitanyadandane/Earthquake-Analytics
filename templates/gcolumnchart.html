@@ -1,0 +1,60 @@
+<html>
+<center>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {packages:['corechart']});
+      google.charts.setOnLoadCallback(drawStuff);
+
+        // function random_color () {
+        //   return 'rgb(' + random_color_part() + ',' + random_color_part() + ',' + random_color_part() + ')'
+        // }
+      
+
+        function drawStuff() {
+          var data = new google.visualization.DataTable();
+          // data.addColumn('string', 'Location');
+          // data.addColumn('number', 'Count');
+          // data.addColumn('number', 'cid');
+
+          var data = google.visualization.arrayToDataTable([
+                      [{label: 'Location', type: 'string'},
+                     {label: 'Count', type: 'number'},{ role: 'style' }]
+                     ]);
+          {% for rows,colors in ci %}
+          data.addRows([['{{rows[1]}}',{{rows[0]}},'color:{{colors}}']]);
+          {% endfor %}
+
+         var options = {
+           title: 'Number of earthquakes in all states',
+           width: 1100,
+           height: 900,
+           legend: 'none',
+           bar: {groupWidth: '50%'},
+           vAxis: { gridlines: { count: 10 }}
+         };
+
+         var chart = new google.visualization.ColumnChart(document.getElementById('number_format_chart'));
+         chart.draw(data, options);
+
+         document.getElementById('format-select').onchange = function() {
+           options['vAxis']['format'] = this.value;
+           chart.draw(data, options);
+         };
+      };
+    </script>
+  </head>
+  <body>
+    <select id="format-select">
+      <option value="">none</option>
+      <option value="decimal" selected>decimal</option>
+      <option value="scientific">scientific</option>
+      <option value="percent">percent</option>
+      <option value="currency">currency</option>
+      <option value="short">short</option>
+      <option value="long">long</option>
+    </select>
+    <div id="number_format_chart">
+  </body>
+</center>  
+</html>
